@@ -5,29 +5,31 @@
 // @description  Finds the best wormhole for a given source or destination.
 // @author       Norgette Audier
 // @match        https://mapper.eveuniversity.org/map/*
+// @require      https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js
 // @require      https://gitlab.com/norganna-eve/pathfinder/raw/master/js/pathfinder.js
-// @grant        none
+// @grant        unsafeWindow
 // ==/UserScript==
 
 (function() {
   'use strict';
-
+  
+  const win = unsafeWindow ? unsafeWindow : window;
   const pf = window.PathFinder;
-
+  
   const finder = $('<button id="btnPath" class="btn btn-xs btn-primary">PathFinder</button>');
   const search = $('<div id="pathFinderSearch" style="margin: 0.25em 0;">');
   const searchBox = $('<input type="text" id="findSystem" class="systemAuto form-control input-sm" style="width: 400px; display: inline-block;" placeholder="System Name"/>');
   const searchButton = $('<button id="btnSearch" class="btn btn-sm btn-primary">Search</button>')
   const searchResults = $('<div>');
   search.append(searchBox).append(searchButton).append(searchResults).hide();
-
-  finder.click(() => search.toggle());
-  searchButton.click(() => showPathFinder(searchBox.val()));
-
+  
+  finder.on('click', () => search.toggle());
+  searchButton.on('click', () => showPathFinder(searchBox.val()));
+  
   $('.btn-toolbar').append(finder).after(search);
-
+  
   function showPathFinder(search) {
-    const s = window.systemsJSON;
+    const s = win.systemsJSON;
     const results = [];
     const distance = {};
     const path = {};
@@ -47,7 +49,7 @@
         }
       }
     }
-
+    
     searchResults.text('');
     results.sort((a,b) => distance[a]-distance[b]);
     for (let i = 0; i < results.length; i++) {
