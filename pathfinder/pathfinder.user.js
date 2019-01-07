@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Best Wormhole
+// @name         BestPath Wormhole
 // @namespace    https://mapper.eveuniversity.org/
-// @version      0.1
+// @version      0.2
 // @description  Finds the best wormhole for a given source or destination.
 // @author       Norgette Audier
 // @match        https://mapper.eveuniversity.org/map/*
@@ -12,22 +12,22 @@
 
 (function() {
   'use strict';
-  
+
   const win = unsafeWindow ? unsafeWindow : window;
   const pf = window.PathFinder;
-  
+
   const finder = $('<button id="btnPath" class="btn btn-xs btn-primary">PathFinder</button>');
   const search = $('<div id="pathFinderSearch" style="margin: 0.25em 0;">');
   const searchBox = $('<input type="text" id="findSystem" class="systemAuto form-control input-sm" style="width: 400px; display: inline-block;" placeholder="System Name"/>');
   const searchButton = $('<button id="btnSearch" class="btn btn-sm btn-primary">Search</button>')
   const searchResults = $('<div>');
   search.append(searchBox).append(searchButton).append(searchResults).hide();
-  
+
   finder.on('click', () => search.toggle());
   searchButton.on('click', () => showPathFinder(searchBox.val()));
-  
+
   $('.btn-toolbar').append(finder).after(search);
-  
+
   function showPathFinder(search) {
     const s = win.systemsJSON;
     const results = [];
@@ -49,7 +49,7 @@
         }
       }
     }
-    
+
     searchResults.text('');
     results.sort((a,b) => distance[a]-distance[b]);
     for (let i = 0; i < results.length; i++) {
